@@ -16,5 +16,12 @@ CREATED_DATE_LABEL = "Created Date"
 COMPLETED = "Completed"
 
 
-TASKS_LABELS = [ID.upper(), DESCRIPTION.capitalize(), PRIORITY.capitalize(), CREATED_DATE_LABEL, DUE_DATE_LABEL, ""]
+TASKS_LABELS = [
+    ID.upper(),
+    DESCRIPTION.capitalize(),
+    PRIORITY.capitalize(),
+    CREATED_DATE_LABEL,
+    DUE_DATE_LABEL,
+    "",
+]
 TASKS_COLUMNS = [ID, DESCRIPTION, PRIORITY, CREATED_DATE_COLUMN, DUE_DATE_COLUMN, ""]

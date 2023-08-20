@@ -99,7 +99,9 @@ class TaskManagementWindow(QMainWindow):
                 DESCRIPTION: "Task Placeholder",
                 PRIORITY: LOW,
                 CREATED_DATE_COLUMN: str(datetime.datetime.utcnow()),
-                DUE_DATE_COLUMN: str(datetime.datetime.utcnow() + datetime.timedelta(days=10)),
+                DUE_DATE_COLUMN: str(
+                    datetime.datetime.utcnow() + datetime.timedelta(days=10)
+                ),
             }
         ]
 
@@ -111,10 +113,14 @@ class TaskManagementWindow(QMainWindow):
         for row_index, row in enumerate(tasks_data):
             tasks_table.setItem(row_index, 0, QTableWidgetItem(1))
             for column_index, key in enumerate(TASKS_COLUMNS):
-                tasks_table.setItem(row_index, column_index, QTableWidgetItem(row.get(key)))
+                tasks_table.setItem(
+                    row_index, column_index, QTableWidgetItem(row.get(key))
+                )
             completed_button = QPushButton(COMPLETED)
             completed_button.clicked.connect(lambda: utils.completed_task(row))
-            tasks_table.setCellWidget(row_index, len(TASKS_COLUMNS) - 1, completed_button)
+            tasks_table.setCellWidget(
+                row_index, len(TASKS_COLUMNS) - 1, completed_button
+            )
         tasks_table.setHorizontalHeaderLabels(TASKS_LABELS)
         tasks_table.resizeColumnsToContents()
         tasks_table.resizeRowsToContents()

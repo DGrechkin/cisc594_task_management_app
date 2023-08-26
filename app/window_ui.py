@@ -15,7 +15,7 @@ from app.constants import *
 
 class TaskManagementWindow(QMainWindow):
     def __init__(self):
-        super(TaskManagementWindow, self).__init__()
+        super().__init__()
         self.title = TASK_MANAGEMENT_TOOL
         self.left = 150
         self.right = 150
@@ -29,8 +29,7 @@ class TaskManagementWindow(QMainWindow):
         :return: None
         """
         self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.right, self.width, self.height)
-
+        self.resize(self.width, self.height)
         self.build_add_button()
 
         sort_label = QLabel(LIST_TASKS_BY, self)

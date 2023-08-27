@@ -74,11 +74,18 @@ class TaskManagementWindow(QMainWindow):
         print(f"{sort_by} is selected")
         tasks_data = db_transfer.get_tasks_data()
 
-        # TODO: Add sorting algorithm for tasks
+        if sort_by == ID:
+            tasks_data = sorted(tasks_data, key=lambda task: task[ID])
+        elif sort_by == PRIORITY:
+            tasks_data = sorted(
+                tasks_data, key=lambda task: PRIORITY_MAPPING.get(task[PRIORITY])
+            )
+        elif sort_by == DUE_DATE_LABEL:
+            tasks_data = sorted(tasks_data, key=lambda task: task[DUE_DATE_COLUMN])
 
         self.build_tasks_list(tasks_data)
 
-    def build_tasks_list(self, tasks_data):
+    def build_tasks_list(self, tasks_data: list):
         """List all tasks that still need to be completed.
 
         List of tasks is a table that has the following columns:

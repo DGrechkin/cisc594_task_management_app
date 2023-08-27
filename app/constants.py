@@ -44,3 +44,8 @@ TASKS_COLUMNS = [
     DUE_DATE_COLUMN,
     "",
 ]
+PRIORITY_MAPPING = {
+    HIGH: 1,
+    MEDIUM: 2,
+    LOW: 3,
+}

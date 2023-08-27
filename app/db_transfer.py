@@ -65,6 +65,7 @@ def get_tasks_data():
 
     cursor.execute("SELECT * FROM tasks")
     rows = cursor.fetchall()
+    conn.commit()
 
     tasks_list = []
     for row in rows:
@@ -79,4 +80,22 @@ def get_tasks_data():
         ) = row
         tasks_list.append(task)
 
+    cursor.close()
+    conn.close()
+
     return tasks_list
+
+
+def remove_task(task_id: int):
+    """This function deletes a task record by unique ID
+
+    :param task_id: Unique ID integer value
+    :return: None
+    """
+    conn = sqlite3.connect(TASKS_DB)
+    cursor = conn.cursor()
+
+    cursor.execute(f"DELETE FROM tasks WHERE id = {task_id}")
+    conn.commit()
+    cursor.close()
+    conn.close()

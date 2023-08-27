@@ -2,6 +2,7 @@
 from app import add_task_ui
 from app.db_transfer import save_task
 from app.db_transfer import get_tasks_data
+from app.db_transfer import remove_task
 
 
 def add_task():

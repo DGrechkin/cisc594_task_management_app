@@ -78,6 +78,7 @@ def get_tasks_data():
             task[PRIORITY],
             task[CREATED_DATE_COLUMN],
         ) = row
+        task[ID] = f"{task[ID]:02}"
         tasks_list.append(task)
 
     cursor.close()

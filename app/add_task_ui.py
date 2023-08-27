@@ -2,6 +2,7 @@
 from datetime import datetime
 
 from app.constants import *
+from app.db_transfer import save_task
 
 from PyQt5.QtWidgets import QComboBox
 from PyQt5.QtWidgets import QDateTimeEdit
@@ -113,6 +114,7 @@ class AddTaskWindow(QDialog):
             QMessageBox.warning(self, WARNING, INCOMPLETE_TASK_ERROR)
             return
 
+        save_task(self.task_data)
         self.accept()
 
     def add_save_button(self):

@@ -1,15 +1,14 @@
 """This file contains TaskManagementWindow class"""
-import datetime
-
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QComboBox
 from PyQt5.QtWidgets import QTableWidget
 from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QHeaderView
 
+from app import add_task_ui
 from app import db_transfer
-from app import utils
 from app.constants import *
 
 
@@ -21,6 +20,8 @@ class TaskManagementWindow(QMainWindow):
         self.right = 150
         self.width = 700
         self.height = 600
+        self.tasks_table = QTableWidget(self)
+        self.sort_drop_down = QComboBox(self)
         self.initUI()
 
     def initUI(self):
@@ -47,7 +48,7 @@ class TaskManagementWindow(QMainWindow):
         """
         add_button = QPushButton(ADD, self)
         add_button.move(40, 25)
-        add_button.clicked.connect(utils.add_task)
+        add_button.clicked.connect(self.add_task)
 
     def build_sort_menu(self):
         """Setup drop down Sort menu.
@@ -58,12 +59,11 @@ class TaskManagementWindow(QMainWindow):
 
         :return: None
         """
-        sort_drop_down = QComboBox(self)
-        sort_drop_down.addItem(ID.upper())
-        sort_drop_down.addItem(PRIORITY.capitalize())
-        sort_drop_down.addItem(DUE_DATE_LABEL)
-        sort_drop_down.move(280, 25)
-        sort_drop_down.activated[str].connect(self.sort_tasks)
+        self.sort_drop_down.addItem(ID.upper())
+        self.sort_drop_down.addItem(PRIORITY.capitalize())
+        self.sort_drop_down.addItem(DUE_DATE_LABEL)
+        self.sort_drop_down.move(280, 25)
+        self.sort_drop_down.activated[str].connect(self.sort_tasks)
 
     def sort_tasks(self, sort_by):
         """Sort and rebuild the list of tasks by the selected parameter
@@ -71,12 +71,11 @@ class TaskManagementWindow(QMainWindow):
         :param sort_by: str, parameter by which list should be sorted
         :return: None
         """
-        print(f"{sort_by} is selected")
         tasks_data = db_transfer.get_tasks_data()
 
-        if sort_by == ID:
+        if sort_by == ID.upper():
             tasks_data = sorted(tasks_data, key=lambda task: task[ID])
-        elif sort_by == PRIORITY:
+        elif sort_by == PRIORITY.capitalize():
             tasks_data = sorted(
                 tasks_data, key=lambda task: PRIORITY_MAPPING.get(task[PRIORITY])
             )
@@ -96,38 +95,49 @@ class TaskManagementWindow(QMainWindow):
         :param tasks_data: list, sorted list of tasks
         :return: None
         """
-        print("Build tasks list in the main window")
-
-        # Temporary task placeholder
-        tasks_data = [
-            {
-                ID: str(1),
-                TITLE: "Task Title Placeholder",
-                DESCRIPTION: "Task Placeholder",
-                PRIORITY: LOW,
-                CREATED_DATE_COLUMN: str(datetime.datetime.utcnow()),
-                DUE_DATE_COLUMN: str(
-                    datetime.datetime.utcnow() + datetime.timedelta(days=10)
-                ),
-            }
-        ]
-
-        tasks_table = QTableWidget(self)
-        tasks_table.setColumnCount(len(TASKS_COLUMNS))
-        tasks_table.setRowCount(len(tasks_data))
-        tasks_table.move(15, 70)
-        tasks_table.resize(self.width - 30, self.height - 85)
+        self.tasks_table.setColumnCount(len(TASKS_COLUMNS))
+        self.tasks_table.setRowCount(len(tasks_data))
+        self.tasks_table.move(15, 70)
+        self.tasks_table.resize(self.width - 30, self.height - 85)
         for row_index, row in enumerate(tasks_data):
-            tasks_table.setItem(row_index, 0, QTableWidgetItem(1))
+            self.tasks_table.setItem(row_index, 0, QTableWidgetItem(1))
             for column_index, key in enumerate(TASKS_COLUMNS):
-                tasks_table.setItem(
+                self.tasks_table.setItem(
                     row_index, column_index, QTableWidgetItem(row.get(key))
                 )
             completed_button = QPushButton(COMPLETED)
-            completed_button.clicked.connect(lambda: utils.completed_task(row))
-            tasks_table.setCellWidget(
+            completed_button.clicked.connect(lambda _, row_id=row.get(ID): self.completed_task(row_id))
+            self.tasks_table.setCellWidget(
                 row_index, len(TASKS_COLUMNS) - 1, completed_button
             )
-        tasks_table.setHorizontalHeaderLabels(TASKS_LABELS)
-        tasks_table.resizeColumnsToContents()
-        tasks_table.resizeRowsToContents()
+        self.tasks_table.setHorizontalHeaderLabels(TASKS_LABELS)
+        header = self.tasks_table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.Fixed)
+        header.setSectionResizeMode(2, QHeaderView.Stretch)
+        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(6, QHeaderView.ResizeToContents)
+        self.tasks_table.resizeRowsToContents()
+
+    def add_task(self):
+        """Triggers "Add Task" window to pop up
+
+        Once task is added, refresh and sort the table view to display the new task
+
+        :return: None
+        """
+        add_window = add_task_ui.AddTaskWindow()
+        add_window.exec_()
+        self.sort_tasks(ID)
+
+    def completed_task(self, task_id: str):
+        """Task is completed. Remove record from the DB and refresh the table view
+
+        :param task_id: str, Task ID string
+        :return: None
+        """
+        db_transfer.remove_task(int(task_id))
+        current_sort_option = self.sort_drop_down.currentText()
+        self.sort_tasks(current_sort_option)

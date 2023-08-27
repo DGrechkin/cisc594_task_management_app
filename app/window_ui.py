@@ -15,7 +15,7 @@ from app.constants import *
 
 class TaskManagementWindow(QMainWindow):
     def __init__(self):
-        super(TaskManagementWindow, self).__init__()
+        super().__init__()
         self.title = TASK_MANAGEMENT_TOOL
         self.left = 150
         self.right = 150
@@ -29,8 +29,7 @@ class TaskManagementWindow(QMainWindow):
         :return: None
         """
         self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.right, self.width, self.height)
-
+        self.resize(self.width, self.height)
         self.build_add_button()
 
         sort_label = QLabel(LIST_TASKS_BY, self)
@@ -83,9 +82,9 @@ class TaskManagementWindow(QMainWindow):
         """List all tasks that still need to be completed.
 
         List of tasks is a table that has the following columns:
-        +----+------------------+----------+--------------+----------+
-        | ID | Task Description | Priority | Created Date | Due Date |
-        +----+------------------+----------+--------------+----------+
+        +----+-------+------------------+----------+--------------+----------+
+        | ID | Title | Task Description | Priority | Created Date | Due Date |
+        +----+-------+------------------+----------+--------------+----------+
 
         :param tasks_data: list, sorted list of tasks
         :return: None
@@ -96,6 +95,7 @@ class TaskManagementWindow(QMainWindow):
         tasks_data = [
             {
                 ID: str(1),
+                TITLE: "Task Title Placeholder",
                 DESCRIPTION: "Task Placeholder",
                 PRIORITY: LOW,
                 CREATED_DATE_COLUMN: str(datetime.datetime.utcnow()),

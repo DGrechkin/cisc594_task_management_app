@@ -13,6 +13,7 @@ DUE_DATE_COLUMN = "due_date"
 DUE_DATE_LABEL = "Due Date"
 HIGH = "high"
 ID = "id"
+INCOMPLETE_TASK_ERROR = "Title and Description cannot be empty."
 LIST_TASKS_BY = "List Tasks by:"
 LOW = "low"
 MEDIUM = "medium"
@@ -21,14 +22,25 @@ SAVE = "Save"
 TASK_DESCRIPTION = "Task Description"
 TASK_MANAGEMENT_TOOL = "Task Management Tool"
 TIME = "Time"
+TITLE = "title"
+WARNING = "Warning"
 
 
 TASKS_LABELS = [
     ID.upper(),
+    TITLE.capitalize(),
     DESCRIPTION.capitalize(),
     PRIORITY.capitalize(),
     CREATED_DATE_LABEL,
     DUE_DATE_LABEL,
     "",
 ]
-TASKS_COLUMNS = [ID, DESCRIPTION, PRIORITY, CREATED_DATE_COLUMN, DUE_DATE_COLUMN, ""]
+TASKS_COLUMNS = [
+    ID,
+    TITLE,
+    DESCRIPTION,
+    PRIORITY,
+    CREATED_DATE_COLUMN,
+    DUE_DATE_COLUMN,
+    "",
+]

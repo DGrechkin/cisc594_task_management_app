@@ -1,5 +1,6 @@
 """This file contains the back-end functions of the Task Manager App"""
-from app import add_task_window
+from app import add_task_ui
+from app.db_transfer import save_task
 
 
 def add_task():
@@ -7,10 +8,9 @@ def add_task():
 
     :return:
     """
-    add_window = add_task_window.AddTaskWindow()
+    add_window = add_task_ui.AddTaskWindow()
     add_window.exec_()
-    print(add_window.task_data)
-    pass
+    save_task(add_window.task_data)
 
 
 def completed_task(row):

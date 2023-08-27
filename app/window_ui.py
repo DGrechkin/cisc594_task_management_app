@@ -82,9 +82,9 @@ class TaskManagementWindow(QMainWindow):
         """List all tasks that still need to be completed.
 
         List of tasks is a table that has the following columns:
-        +----+------------------+----------+--------------+----------+
-        | ID | Task Description | Priority | Created Date | Due Date |
-        +----+------------------+----------+--------------+----------+
+        +----+-------+------------------+----------+--------------+----------+
+        | ID | Title | Task Description | Priority | Created Date | Due Date |
+        +----+-------+------------------+----------+--------------+----------+
 
         :param tasks_data: list, sorted list of tasks
         :return: None
@@ -95,6 +95,7 @@ class TaskManagementWindow(QMainWindow):
         tasks_data = [
             {
                 ID: str(1),
+                TITLE: "Task Title Placeholder",
                 DESCRIPTION: "Task Placeholder",
                 PRIORITY: LOW,
                 CREATED_DATE_COLUMN: str(datetime.datetime.utcnow()),

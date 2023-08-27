@@ -9,7 +9,7 @@ def create_tasks_table():
 
     :return: None
     """
-    conn = sqlite3.connect("tasks.db")
+    conn = sqlite3.connect(TASKS_DB)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -20,7 +20,7 @@ def create_tasks_table():
             description TEXT,
             due_date TEXT,
             priority TEXT,
-            created_date DATETIME default current_timestamp
+            created_date DATETIME default (strftime('%Y-%m-%d %H:%M', 'now', 'localtime'))
         )
     """
     )
@@ -35,7 +35,7 @@ def save_task(task_data: dict):
     :param task_data: Dictionary with a task data
     :return: None
     """
-    conn = sqlite3.connect("tasks.db")
+    conn = sqlite3.connect(TASKS_DB)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -58,7 +58,25 @@ def save_task(task_data: dict):
 def get_tasks_data():
     """Read all tasks from the database and return it in list format
 
-    :return: List
+    :return: List of tasks
     """
-    print("DB read is called")
-    pass
+    conn = sqlite3.connect(TASKS_DB)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM tasks")
+    rows = cursor.fetchall()
+
+    tasks_list = []
+    for row in rows:
+        task = dict()
+        (
+            task[ID],
+            task[TITLE],
+            task[DESCRIPTION],
+            task[DUE_DATE_COLUMN],
+            task[PRIORITY],
+            task[CREATED_DATE_COLUMN],
+        ) = row
+        tasks_list.append(task)
+
+    return tasks_list

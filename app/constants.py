@@ -19,12 +19,12 @@ LOW = "low"
 MEDIUM = "medium"
 PRIORITY = "priority"
 SAVE = "Save"
+TASKS_DB = "tasks.db"
 TASK_DESCRIPTION = "Task Description"
 TASK_MANAGEMENT_TOOL = "Task Management Tool"
 TIME = "Time"
 TITLE = "title"
 WARNING = "Warning"
-
 
 TASKS_LABELS = [
     ID.upper(),
@@ -44,3 +44,8 @@ TASKS_COLUMNS = [
     DUE_DATE_COLUMN,
     "",
 ]
+PRIORITY_MAPPING = {
+    HIGH: 1,
+    MEDIUM: 2,
+    LOW: 3,
+}

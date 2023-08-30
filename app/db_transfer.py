@@ -21,6 +21,7 @@ def create_tasks_table():
             due_date TEXT,
             priority TEXT,
             reminder_interval INTEGER,
+            category TEXT,
             created_date DATETIME default (strftime('%Y-%m-%d %H:%M', 'now', 'localtime'))
         )
     """
@@ -41,8 +42,8 @@ def save_task(task_data: dict):
 
     cursor.execute(
         """
-        INSERT INTO tasks (title, description, due_date, priority, reminder_interval)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO tasks (title, description, due_date, priority, reminder_interval, category)
+        VALUES (?, ?, ?, ?, ?, ?)
     """,
         (
             task_data[TITLE],
@@ -50,12 +51,12 @@ def save_task(task_data: dict):
             task_data[DUE_DATE_LABEL],
             task_data[PRIORITY],
             task_data[REMINDER_INTERVAL],
+            task_data[CATEGORY],
         ),
     )
 
     conn.commit()
     conn.close()
-
 
 def get_tasks_data():
     """Read all tasks from the database and return it in list format
@@ -79,6 +80,7 @@ def get_tasks_data():
             task[DUE_DATE_COLUMN],
             task[PRIORITY],
             task[REMINDER_INTERVAL],
+            task[CATEGORY],
             task[CREATED_DATE_COLUMN],
         ) = row
         task[ID] = f"{task[ID]:02}"

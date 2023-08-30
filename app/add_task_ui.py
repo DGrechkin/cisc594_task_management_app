@@ -32,6 +32,7 @@ class AddTaskWindow(QDialog):
         self.box_layout = QVBoxLayout()
         self.task_data = {}
         self.reminder_interval_input = QSpinBox()
+        self.category_input = QLineEdit()
         self.initUI()
 
     def initUI(self):
@@ -51,6 +52,7 @@ class AddTaskWindow(QDialog):
 
         self.setLayout(self.box_layout)
         self.add_reminder_interval_widget()
+        self.add_category_widget()
 
     def add_title_widget(self):
         """Add a text box where users can enter their task title
@@ -111,6 +113,15 @@ class AddTaskWindow(QDialog):
         self.box_layout.addWidget(reminder_interval_label)
         self.box_layout.addWidget(self.reminder_interval_input)
 
+    def add_category_widget(self):
+        """Add a text box where users can enter their task category
+
+        :return: None
+        """
+        category_label = QLabel(f"{CATEGORY.capitalize()}:")
+        self.box_layout.addWidget(category_label)
+        self.box_layout.addWidget(self.category_input)
+
     def collect_task_data(self):
         """The function collects user input in a dictionary
 
@@ -122,6 +133,7 @@ class AddTaskWindow(QDialog):
         self.task_data[DUE_DATE_LABEL] = due_date
         self.task_data[TITLE] = self.title_input.text()
         self.task_data[REMINDER_INTERVAL] = self.reminder_interval_input.value()
+        self.task_data[CATEGORY] = self.category_input.text()
 
         if not self.task_data[TITLE] or not self.task_data[DESCRIPTION]:
             QMessageBox.warning(self, WARNING, INCOMPLETE_TASK_ERROR)

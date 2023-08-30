@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QComboBox
 from PyQt5.QtWidgets import QTableWidget
 from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtWidgets import QHeaderView
+from PyQt5.QtWidgets import QLineEdit
 
 from app import add_task_ui
 from app import db_transfer
@@ -22,6 +23,7 @@ class TaskManagementWindow(QMainWindow):
         self.height = 600
         self.tasks_table = QTableWidget(self)
         self.sort_drop_down = QComboBox(self)
+        self.category_filter_input = QLineEdit(self)
         self.initUI()
 
     def initUI(self):
@@ -38,6 +40,7 @@ class TaskManagementWindow(QMainWindow):
 
         self.build_sort_menu()
         self.sort_tasks(ID)
+        self.build_category_filter_input()
 
     def build_add_button(self):
         """Setup Add button that is creating a new task
@@ -141,3 +144,27 @@ class TaskManagementWindow(QMainWindow):
         db_transfer.remove_task(int(task_id))
         current_sort_option = self.sort_drop_down.currentText()
         self.sort_tasks(current_sort_option)
+
+    def filter_tasks_by_category(self, category):
+        tasks_data = db_transfer.get_tasks_data()
+        filtered_tasks = [task for task in tasks_data if task[CATEGORY] == category]
+        self.build_tasks_list(filtered_tasks)
+
+    def build_category_filter_input(self):
+        """Add a text box where users can enter a category to filter tasks
+
+        :return: None
+        """
+        category_filter_label = QLabel(f"Filter by {CATEGORY.capitalize()}:", self)
+        category_filter_label.move(400, 25)
+
+        self.category_filter_input.move(520, 25)
+        self.category_filter_input.textChanged.connect(self.apply_category_filter)
+
+    def apply_category_filter(self):
+        category = self.category_filter_input.text()
+        if category:
+            self.filter_tasks_by_category(category)
+        else:
+            self.sort_tasks(ID)
+

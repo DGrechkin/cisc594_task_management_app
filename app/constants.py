@@ -26,6 +26,7 @@ TIME = "Time"
 TITLE = "title"
 WARNING = "Warning"
 REMINDER_INTERVAL = "reminder_interval"
+CATEGORY = "category"
 
 TASKS_LABELS = [
     ID.upper(),

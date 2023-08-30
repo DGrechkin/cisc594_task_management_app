@@ -25,6 +25,7 @@ TASK_MANAGEMENT_TOOL = "Task Management Tool"
 TIME = "Time"
 TITLE = "title"
 WARNING = "Warning"
+REMINDER_INTERVAL = "reminder_interval"
 
 TASKS_LABELS = [
     ID.upper(),

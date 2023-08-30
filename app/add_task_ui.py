@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QSpinBox
 
 
 class AddTaskWindow(QDialog):
@@ -30,6 +31,7 @@ class AddTaskWindow(QDialog):
         self.title_input = QLineEdit()
         self.box_layout = QVBoxLayout()
         self.task_data = {}
+        self.reminder_interval_input = QSpinBox()
         self.initUI()
 
     def initUI(self):
@@ -48,6 +50,7 @@ class AddTaskWindow(QDialog):
         self.add_close_button()
 
         self.setLayout(self.box_layout)
+        self.add_reminder_interval_widget()
 
     def add_title_widget(self):
         """Add a text box where users can enter their task title
@@ -99,6 +102,15 @@ class AddTaskWindow(QDialog):
         self.box_layout.addWidget(due_date_label)
         self.box_layout.addWidget(self.due_date_box)
 
+    def add_reminder_interval_widget(self):
+        """Add a spin box where users can enter their reminder interval in hours
+
+        :return: None
+        """
+        reminder_interval_label = QLabel(f"{REMINDER_INTERVAL.capitalize()} (hours):")
+        self.box_layout.addWidget(reminder_interval_label)
+        self.box_layout.addWidget(self.reminder_interval_input)
+
     def collect_task_data(self):
         """The function collects user input in a dictionary
 
@@ -109,6 +121,7 @@ class AddTaskWindow(QDialog):
         due_date = self.due_date_box.dateTime().toString(DATETIME_FORMAT)
         self.task_data[DUE_DATE_LABEL] = due_date
         self.task_data[TITLE] = self.title_input.text()
+        self.task_data[REMINDER_INTERVAL] = self.reminder_interval_input.value()
 
         if not self.task_data[TITLE] or not self.task_data[DESCRIPTION]:
             QMessageBox.warning(self, WARNING, INCOMPLETE_TASK_ERROR)

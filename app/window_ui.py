@@ -24,6 +24,7 @@ class TaskManagementWindow(QMainWindow):
         self.tasks_table = QTableWidget(self)
         self.sort_drop_down = QComboBox(self)
         self.category_filter_input = QLineEdit(self)
+        self.search_input = QLineEdit(self)
         self.initUI()
 
     def initUI(self):
@@ -34,6 +35,7 @@ class TaskManagementWindow(QMainWindow):
         self.setWindowTitle(self.title)
         self.resize(self.width, self.height)
         self.build_add_button()
+        self.build_search_input()
 
         sort_label = QLabel(LIST_TASKS_BY, self)
         sort_label.move(200, 25)
@@ -168,3 +170,25 @@ class TaskManagementWindow(QMainWindow):
         else:
             self.sort_tasks(ID)
 
+    def build_search_input(self):
+        """Add a text box where users can enter a search query
+
+        :return: None
+        """
+        search_label = QLabel(f"{SEARCH_QUERY.capitalize()}:", self)
+        search_label.move(400, 50)
+
+        self.search_input.move(520, 50)
+        self.search_input.textChanged.connect(self.apply_search_query)
+
+    def apply_search_query(self):
+        search_query = self.search_input.text()
+        if search_query:
+            self.filter_tasks_by_search_query(search_query)
+        else:
+            self.sort_tasks(ID)
+
+    def filter_tasks_by_search_query(self, search_query):
+        tasks_data = db_transfer.get_tasks_data()
+        filtered_tasks = [task for task in tasks_data if search_query.lower() in task[TITLE].lower() or search_query.lower() in task[DESCRIPTION].lower()]
+        self.build_tasks_list(filtered_tasks)

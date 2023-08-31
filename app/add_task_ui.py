@@ -99,7 +99,7 @@ class AddTaskWindow(QDialog):
         due_date_label = QLabel(f"{DUE_DATE_LABEL}:")
 
         self.due_date_box.setDateTime(datetime.now())
-        self.due_date_box.setDisplayFormat(DATETIME_FORMAT)
+        self.due_date_box.setDisplayFormat("yyyy-MM-dd HH:mm")
 
         self.box_layout.addWidget(due_date_label)
         self.box_layout.addWidget(self.due_date_box)

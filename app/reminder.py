@@ -1,7 +1,7 @@
 import time
 from datetime import datetime, timedelta
 from app.db_transfer import get_tasks_data
-from app.constants import DUE_DATE_COLUMN, DATETIME_FORMAT, TITLE
+from app.constants import DUE_DATE_COLUMN, DATETIME_FORMAT, TITLE, REMINDER_INTERVAL
 
 def check_reminders():
     while True:

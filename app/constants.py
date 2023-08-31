@@ -27,6 +27,7 @@ TITLE = "title"
 WARNING = "Warning"
 REMINDER_INTERVAL = "reminder_interval"
 CATEGORY = "category"
+SEARCH_QUERY = "search_query"
 
 TASKS_LABELS = [
     ID.upper(),

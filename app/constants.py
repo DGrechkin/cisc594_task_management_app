@@ -28,6 +28,7 @@ WARNING = "Warning"
 REMINDER_INTERVAL = "reminder_interval"
 CATEGORY = "category"
 SEARCH_QUERY = "search_query"
+RECURRENCE_INTERVAL = "recurrence_interval"
 
 TASKS_LABELS = [
     ID.upper(),

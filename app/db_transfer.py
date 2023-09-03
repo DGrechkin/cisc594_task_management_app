@@ -22,6 +22,7 @@ def create_tasks_table():
             priority TEXT,
             reminder_interval INTEGER,
             category TEXT,
+            recurrence_interval INTEGER,
             created_date DATETIME default (strftime('%Y-%m-%d %H:%M', 'now', 'localtime'))
         )
     """
@@ -42,8 +43,8 @@ def save_task(task_data: dict):
 
     cursor.execute(
         """
-        INSERT INTO tasks (title, description, due_date, priority, reminder_interval, category)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO tasks (title, description, due_date, priority, reminder_interval, category, recurrence_interval)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     """,
         (
             task_data[TITLE],
@@ -52,6 +53,7 @@ def save_task(task_data: dict):
             task_data[PRIORITY],
             task_data[REMINDER_INTERVAL],
             task_data[CATEGORY],
+            task_data[RECURRENCE_INTERVAL],
         ),
     )
 
@@ -105,3 +107,4 @@ def remove_task(task_id: int):
     conn.commit()
     cursor.close()
     conn.close()
+

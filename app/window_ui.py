@@ -192,3 +192,11 @@ class TaskManagementWindow(QMainWindow):
         tasks_data = db_transfer.get_tasks_data()
         filtered_tasks = [task for task in tasks_data if search_query.lower() in task[TITLE].lower() or search_query.lower() in task[DESCRIPTION].lower()]
         self.build_tasks_list(filtered_tasks)
+
+    def mark_task_as_done(self, task_id):
+        task_data = db_transfer.get_task_data(task_id)
+        if task_data[RECURRENCE_INTERVAL] > 0:
+            db_transfer.update_due_date_based_on_recurrence(task_id, task_data[RECURRENCE_INTERVAL])
+        else:
+            db_transfer.delete_task(task_id)
+        self.sort_tasks(ID)

@@ -33,6 +33,7 @@ class AddTaskWindow(QDialog):
         self.task_data = {}
         self.reminder_interval_input = QSpinBox()
         self.category_input = QLineEdit()
+        self.recurrence_interval_input = QSpinBox()
         self.initUI()
 
     def initUI(self):
@@ -53,6 +54,7 @@ class AddTaskWindow(QDialog):
         self.setLayout(self.box_layout)
         self.add_reminder_interval_widget()
         self.add_category_widget()
+        self.add_recurrence_interval_widget()
 
     def add_title_widget(self):
         """Add a text box where users can enter their task title
@@ -129,11 +131,12 @@ class AddTaskWindow(QDialog):
         """
         self.task_data[DESCRIPTION] = self.description_text_box.toPlainText()
         self.task_data[PRIORITY] = self.priority_drop_down.currentText()
-        due_date = self.due_date_box.dateTime().toString(DATETIME_FORMAT)
+        due_date = self.due_date_box.dateTime().toPyDateTime().strftime(DATETIME_FORMAT)
         self.task_data[DUE_DATE_LABEL] = due_date
         self.task_data[TITLE] = self.title_input.text()
         self.task_data[REMINDER_INTERVAL] = self.reminder_interval_input.value()
         self.task_data[CATEGORY] = self.category_input.text()
+        self.task_data[RECURRENCE_INTERVAL] = self.recurrence_interval_input.value()
 
         if not self.task_data[TITLE] or not self.task_data[DESCRIPTION]:
             QMessageBox.warning(self, WARNING, INCOMPLETE_TASK_ERROR)
@@ -158,3 +161,20 @@ class AddTaskWindow(QDialog):
         self.box_layout.addWidget(self.close_button)
         self.task_data = {}
         self.close_button.clicked.connect(self.reject)
+
+    def add_recurrence_interval_widget(self):
+        """Add a spin box where users can enter their task recurrence interval
+
+        :return: None
+        """
+        recurrence_interval_label = QLabel(f"{RECURRENCE_INTERVAL.capitalize()} (days):")
+        self.box_layout.addWidget(recurrence_interval_label)
+        self.box_layout.addWidget(self.recurrence_interval_input)
+
+    def update_due_date_based_on_recurrence(task_id: int, recurrence_interval: int):
+        cursor = connection.cursor()
+        cursor.execute("SELECT due_date FROM tasks WHERE id=?", (task_id,))
+        due_date = cursor.fetchone()[0]
+        new_due_date = datetime.strptime(due_date, "%Y-%m-%d") + timedelta(days=recurrence_interval)
+        cursor.execute("UPDATE tasks SET due_date=? WHERE id=?", (new_due_date.strftime("%Y-%m-%d"), task_id))
+        connection.commit()

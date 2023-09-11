@@ -75,17 +75,11 @@ def get_tasks_data():
     tasks_list = []
     for row in rows:
         task = dict()
-        (
-            task[ID],
-            task[TITLE],
-            task[DESCRIPTION],
-            task[DUE_DATE_COLUMN],
-            task[PRIORITY],
-            task[REMINDER_INTERVAL],
-            task[CATEGORY],
-            task[CREATED_DATE_COLUMN],
-        ) = row
-        task[ID] = f"{task[ID]:02}"
+        for i, key in enumerate([ID, TITLE, DESCRIPTION, DUE_DATE_COLUMN, PRIORITY, REMINDER_INTERVAL, CATEGORY, CREATED_DATE_COLUMN]):
+            if i < len(row):
+                task[key] = row[i]
+        if ID in task:
+            task[ID] = f"{task[ID]:02}"
         tasks_list.append(task)
 
     cursor.close()

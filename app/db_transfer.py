@@ -18,6 +18,7 @@ def create_tasks_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             description TEXT,
+            create_date TEXT,
             due_date TEXT,
             priority TEXT,
             reminder_interval INTEGER,
@@ -43,12 +44,13 @@ def save_task(task_data: dict):
 
     cursor.execute(
         """
-        INSERT INTO tasks (title, description, due_date, priority, reminder_interval, category, recurrence_interval)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO tasks (title, description, create_date, due_date, priority, reminder_interval, category, recurrence_interval)
+        VALUES (?, ?, ?,?, ?, ?, ?, ?)
     """,
         (
             task_data[TITLE],
             task_data[DESCRIPTION],
+            task_data[CREATED_DATE_LABEL],
             task_data[DUE_DATE_LABEL],
             task_data[PRIORITY],
             task_data[REMINDER_INTERVAL],
@@ -56,7 +58,7 @@ def save_task(task_data: dict):
             task_data[RECURRENCE_INTERVAL],
         ),
     )
-
+    print(get_tasks_data)
     conn.commit()
     conn.close()
 
@@ -75,17 +77,11 @@ def get_tasks_data():
     tasks_list = []
     for row in rows:
         task = dict()
-        (
-            task[ID],
-            task[TITLE],
-            task[DESCRIPTION],
-            task[DUE_DATE_COLUMN],
-            task[PRIORITY],
-            task[REMINDER_INTERVAL],
-            task[CATEGORY],
-            task[CREATED_DATE_COLUMN],
-        ) = row
-        task[ID] = f"{task[ID]:02}"
+        for i, key in enumerate([ID, TITLE, DESCRIPTION, CREATED_DATE_COLUMN, DUE_DATE_COLUMN, PRIORITY, REMINDER_INTERVAL, CATEGORY,RECURRENCE_INTERVAL]):
+            if i < len(row):
+                task[key] = row[i]
+        if ID in task:
+            task[ID] = f"{task[ID]:02}"
         tasks_list.append(task)
 
     cursor.close()

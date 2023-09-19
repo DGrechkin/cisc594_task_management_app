@@ -37,7 +37,7 @@ TASKS_LABELS = [
     PRIORITY.capitalize(),
     CREATED_DATE_LABEL,
     DUE_DATE_LABEL,
-    "",
+    "STATUS",
 ]
 TASKS_COLUMNS = [
     ID,
@@ -46,7 +46,7 @@ TASKS_COLUMNS = [
     PRIORITY,
     CREATED_DATE_COLUMN,
     DUE_DATE_COLUMN,
-    "",
+    "STATUS",
 ]
 PRIORITY_MAPPING = {
     HIGH: 1,

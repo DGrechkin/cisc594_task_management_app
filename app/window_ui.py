@@ -102,7 +102,9 @@ class TaskManagementWindow(QMainWindow):
         """
         self.tasks_table.setColumnCount(len(TASKS_COLUMNS))
         self.tasks_table.setRowCount(len(tasks_data))
+        print(tasks_data)
         self.tasks_table.move(15, 70)
+        
         self.tasks_table.resize(self.width - 30, self.height - 85)
         for row_index, row in enumerate(tasks_data):
             self.tasks_table.setItem(row_index, 0, QTableWidgetItem(1))
@@ -118,7 +120,7 @@ class TaskManagementWindow(QMainWindow):
         self.tasks_table.setHorizontalHeaderLabels(TASKS_LABELS)
         header = self.tasks_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(1, QHeaderView.Fixed)
+        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(2, QHeaderView.Stretch)
         header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)

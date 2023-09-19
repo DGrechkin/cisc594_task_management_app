@@ -131,6 +131,8 @@ class AddTaskWindow(QDialog):
         """
         self.task_data[DESCRIPTION] = self.description_text_box.toPlainText()
         self.task_data[PRIORITY] = self.priority_drop_down.currentText()
+        create_date = datetime.now().strftime(DATETIME_FORMAT)
+        self.task_data[CREATED_DATE_LABEL]=create_date
         due_date = self.due_date_box.dateTime().toPyDateTime().strftime(DATETIME_FORMAT)
         self.task_data[DUE_DATE_LABEL] = due_date
         self.task_data[TITLE] = self.title_input.text()
@@ -141,7 +143,7 @@ class AddTaskWindow(QDialog):
         if not self.task_data[TITLE] or not self.task_data[DESCRIPTION]:
             QMessageBox.warning(self, WARNING, INCOMPLETE_TASK_ERROR)
             return
-
+        print(self.task_data)
         save_task(self.task_data)
         self.accept()
 
